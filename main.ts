@@ -6,6 +6,7 @@ input.onButtonPressed(Button.B, function () {
 })
 let emptyobstacley = 0
 let bird: game.LedSprite = null
+let ticks = 0
 let index = 0
 let obstacle: game.LedSprite[] = []
 bird = game.createSprite(0, 2)
@@ -17,10 +18,19 @@ basic.forever(function () {
     for (let obstacle2 of obstacle) {
         obstacle2.change(LedSpriteProperty.X, -1)
     }
-    emptyobstacley = randint(0, 4)
-    for (let index = 0; index <= 4; index++) {
-        if (index == emptyobstacley) {
-            obstacle.push(0)
+    if (ticks % 3 == 0) {
+        emptyobstacley = randint(0, 4)
+        for (let index = 0; index <= 4; index++) {
+            if (index != emptyobstacley) {
+                obstacle.push(game.createSprite(4, index))
+            }
         }
     }
+    for (let obstacle3 of obstacle) {
+        if (obstacle3.get(LedSpriteProperty.X) == bird.get(LedSpriteProperty.X) && obstacle3.get(LedSpriteProperty.Y) == bird.get(LedSpriteProperty.Y)) {
+            game.gameOver()
+        }
+    }
+    ticks += 1
+    basic.pause(1000)
 })
